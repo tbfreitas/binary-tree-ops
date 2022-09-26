@@ -1,42 +1,72 @@
 package nodes
 
 import (
-	"bufio"
+	"bin-tree/src/structs"
 	"fmt"
-	"os"
 	"strconv"
 )
 
 const (
-	error      = "Exiting..."
-	size_array = 3
+	error      = "Not a int value, try again..."
+	size_array = 7
 )
 
 func GetData() []int {
-	ascii := 0
 	var values []int
 
-	for ascii != 27 {
-		consoleReader := bufio.NewReaderSize(os.Stdin, 1)
-		input, _ := consoleReader.ReadByte()
-		ascii := input
+	for len(values) < size_array {
+		temp := ""
+		fmt.Scanln(&temp)
+		ascii := temp
 		asciiInt := string(ascii)
 
 		i, err := strconv.Atoi(asciiInt)
 		if err != nil {
-			fmt.Println("Não é um inteiro , tente novamente...")
+			fmt.Println("Not a int value, try again...")
 		} else {
-			if len(values) < size_array {
-				values = append(values, i)
-			} else {
-				fmt.Println("Not included! Tree values are fullfield!")
-			}
+			values = append(values, i)
 		}
 	}
 
 	return values
 }
 
-func ThrowTree() {
+func CreateNode(value int) *structs.Node {
 
+	rootNode := structs.Node{
+		RightNode: nil,
+		LeftNode:  nil,
+		Value:     value,
+	}
+
+	return &rootNode
+}
+
+func MountTree(values []int, node *structs.Node, index int) {
+	leftIndex := 2*index + 1
+	rightIndex := 2*index + 2
+
+	if 2*index+1 >= len(values) {
+		return
+	}
+
+	node.LeftNode = CreateNode(values[leftIndex])
+	node.RightNode = CreateNode(values[rightIndex])
+
+	MountTree(values, node.LeftNode, leftIndex)   //left node
+	MountTree(values, node.RightNode, rightIndex) //right node
+
+	return
+}
+
+func PrintTree(node *structs.Node) {
+
+	if node.LeftNode != nil {
+		fmt.Println("valor:", node.Value)
+		fmt.Println("L:", node.LeftNode.Value)
+		fmt.Println("R:", node.RightNode.Value)
+		PrintTree(node.LeftNode)
+		PrintTree(node.RightNode)
+
+	}
 }

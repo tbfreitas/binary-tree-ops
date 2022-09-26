@@ -1,7 +1,7 @@
 package structs
 
 type Node struct {
-	Value     int16
+	Value     int
 	LeftNode  *Node
 	RightNode *Node
 }

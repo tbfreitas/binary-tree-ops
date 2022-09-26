@@ -7,7 +7,13 @@ import (
 func main() {
 
 	x := nodes.GetData()
-	// nodes.mountTree()
 
-	println(x)
+	println("--Stopping getting data--")
+
+	rootNode := nodes.CreateNode(x[0])
+	nodes.MountTree(x, rootNode, 0)
+	nodes.PrintTree(rootNode)
+	// nodes.getHeight()
+	// nodes.checkIfIsBallenced
+	// nodes.ballanceTree()
 }
