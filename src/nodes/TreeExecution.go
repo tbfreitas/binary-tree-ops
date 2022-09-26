@@ -8,7 +8,7 @@ import (
 
 const (
 	error      = "Not a int value, try again..."
-	size_array = 7
+	size_array = 16
 )
 
 func GetData() []int {
@@ -46,27 +46,64 @@ func MountTree(values []int, node *structs.Node, index int) {
 	leftIndex := 2*index + 1
 	rightIndex := 2*index + 2
 
-	if 2*index+1 >= len(values) {
-		return
+	if leftIndex < len(values) {
+		node.LeftNode = CreateNode(values[leftIndex])
+		MountTree(values, node.LeftNode, leftIndex) //left node
 	}
 
-	node.LeftNode = CreateNode(values[leftIndex])
-	node.RightNode = CreateNode(values[rightIndex])
-
-	MountTree(values, node.LeftNode, leftIndex)   //left node
-	MountTree(values, node.RightNode, rightIndex) //right node
+	if rightIndex < len(values) {
+		node.RightNode = CreateNode(values[rightIndex])
+		MountTree(values, node.RightNode, rightIndex) //right node
+	}
 
 	return
 }
 
-func PrintTree(node *structs.Node) {
+func GetHeight(node *structs.Node, currentHeight int) int {
+
+	tempLeft := 0
+	tempRight := 0
+
+	if node.LeftNode == nil && node.RightNode == nil {
+		return currentHeight
+	}
 
 	if node.LeftNode != nil {
-		fmt.Println("valor:", node.Value)
+		tempLeft = GetHeight(node.LeftNode, currentHeight+1)
+	} else {
+		tempLeft = currentHeight
+	}
+
+	if node.RightNode != nil {
+		tempRight = GetHeight(node.RightNode, currentHeight+1)
+	} else {
+		tempRight = currentHeight
+	}
+
+	if tempLeft >= tempRight {
+		return tempLeft
+	}
+
+	return tempRight
+}
+
+func PrintTree(node *structs.Node) {
+	fmt.Println("valor:", node.Value)
+
+	if node.LeftNode != nil && node.RightNode != nil {
 		fmt.Println("L:", node.LeftNode.Value)
 		fmt.Println("R:", node.RightNode.Value)
 		PrintTree(node.LeftNode)
 		PrintTree(node.RightNode)
+	}
 
+	if node.LeftNode != nil && node.RightNode == nil {
+		fmt.Println("L:", node.LeftNode.Value)
+		PrintTree(node.LeftNode)
+	}
+
+	if node.RightNode != nil && node.LeftNode == nil {
+		fmt.Println("R:", node.RightNode.Value)
+		PrintTree(node.RightNode)
 	}
 }

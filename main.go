@@ -8,12 +8,19 @@ func main() {
 
 	x := nodes.GetData()
 
-	println("--Stopping getting data--")
+	println("-----------------------")
+	println(" *Stopping getting data --")
+	println("-----------------------")
 
 	rootNode := nodes.CreateNode(x[0])
 	nodes.MountTree(x, rootNode, 0)
 	nodes.PrintTree(rootNode)
-	// nodes.getHeight()
+	height := nodes.GetHeight(rootNode, 1)
+
+	println("-----------------------")
+	println(" *Tree height: ", height)
+	println("-----------------------")
+
 	// nodes.checkIfIsBallenced
 	// nodes.ballanceTree()
 }
